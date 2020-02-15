@@ -221,6 +221,9 @@ class DatabaseCreation(BaseDatabaseCreation):
         if verbosity >= 2:
             self.log('_create_test_user(): username = %s' % parameters['user'])
         statements = [
+            """
+               ALTER SESSION set "_ORACLE_SCRIPT"=true
+            """,
             """CREATE USER %(user)s
                IDENTIFIED BY "%(password)s"
                DEFAULT TABLESPACE %(tblspace)s
@@ -264,6 +267,7 @@ class DatabaseCreation(BaseDatabaseCreation):
             self.log('_destroy_test_user(): user=%s' % parameters['user'])
             self.log('Be patient. This can take some time...')
         statements = [
+            'ALTER SESSION set "_ORACLE_SCRIPT"=true',
             'DROP USER %(user)s CASCADE',
         ]
         self._execute_statements(cursor, statements, parameters, verbosity)
